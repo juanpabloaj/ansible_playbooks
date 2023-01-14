@@ -8,18 +8,46 @@
     - name: Install prerequisites
       apt: name=aptitude update_cache=yes state=latest force_apt_get=yes
 
+    - name: Install required system packages
+      apt: name={{ sys_packages }} state=latest
+
     - name: Ensure the locale exists
       locale_gen:
         name: en_US.UTF-8
         state: present
     - name: set as default locale
-      command: localectl set-locale LANG=en_US.UTF-8 #LC_ALL=en_US.UTF-8
+      command: localectl set-locale LANG=en_US.UTF-8
     - name: update local as en_US
       command: update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 
     - name: Install mosh
-      apt:
-        name: mosh
-        state: present
-        force_apt_get: yes
+      apt: name=mosh state=present force_apt_get=yes
 
+    - name: Install docker requirements
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
