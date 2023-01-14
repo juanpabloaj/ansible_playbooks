@@ -1,0 +1,25 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+    - name: Install prerequisites
+      apt: name=aptitude update_cache=yes state=latest force_apt_get=yes
+
+    - name: Ensure the locale exists
+      locale_gen:
+        name: en_US.UTF-8
+        state: present
+    - name: set as default locale
+      command: localectl set-locale LANG=en_US.UTF-8 #LC_ALL=en_US.UTF-8
+    - name: update local as en_US
+      command: update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+
+    - name: Install mosh
+      apt:
+        name: mosh
+        state: present
+        force_apt_get: yes
+
