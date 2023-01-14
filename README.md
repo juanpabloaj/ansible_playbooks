@@ -16,6 +16,10 @@ Set inventory file with hosts
     [all:vars]
     ansible_python_interpreter=/usr/bin/python3
 
+Test connection
+
+    ansible all -m ping
+
 Run playbook
 
 	ansible-playbook -v playbook.yml -l fra1
