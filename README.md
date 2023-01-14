@@ -1,5 +1,21 @@
 # ansible_playbooks
 
+Install ansible
+
+    sudo apt-add-repository ppa:ansible/ansible &&
+    sudo apt update && sudo apt install ansible -y
+
+Set inventory file with hosts
+
+    sudo vim /etc/ansible/hosts
+
+    [servers]
+    server1 ansible_host=203.0.113.111
+    server2 ansible_host=203.0.113.112
+
+    [all:vars]
+    ansible_python_interpreter=/usr/bin/python3
+
 Run playbook
 
 	ansible-playbook -v playbook.yml -l fra1
